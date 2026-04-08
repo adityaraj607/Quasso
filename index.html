@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quasso — English to French AI Translator</title>
+  <meta name="description"
+    content="Quasso translates English and Hinglish to French using a custom AI model trained on real movie subtitles." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+          },
+          colors: {
+            bg: '#0e0e10',
+            surface: '#16161a',
+            card: '#1c1c22',
+            border: '#2a2a35',
+            blue: {
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              glow: '#3b82f620',
+            }
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.7s ease forwards',
+            'blink': 'blink 1s step-end infinite',
+            'float': 'float 4s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: 0, transform: 'translateY(28px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            blink: {
+              '0%, 100%': { opacity: 1 },
+              '50%': { opacity: 0 },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #0e0e10;
+      font-family: 'Inter', sans-serif;
+      color: #e2e8f0;
+    }
+
+    section {
+      scroll-snap-align: start;
+      height: 100dvh;
+      overflow: hidden;
+    }
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0e0e10;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 99px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .orb-blue {
+      background: rgba(59, 130, 246, 0.18);
+    }
+
+    .orb-indigo {
+      background: rgba(99, 102, 241, 0.12);
+    }
+    .translate-box {
+      background: #16161a;
+      border: 1px solid #2a2a35;
+      border-radius: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .translate-box:focus-within {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+
+    textarea {
+      background: transparent;
+      resize: none;
+      outline: none;
+      color: #e2e8f0;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    textarea::placeholder {
+      color: #4a4a5a;
+    }
+
+    .btn-translate {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.65rem 1.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-translate:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(59, 130, 246, 0.45);
+    }
+
+    .btn-translate:active {
+      transform: scale(0.97);
+    }
+
+    .btn-translate:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .output-box {
+      min-height: 120px;
+      font-size: 1.1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      color: #93c5fd;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading .spinner {
+      display: block;
+    }
+
+    .loading .btn-text {
+      display: none;
+    }
+    .cursor::after {
+      content: '|';
+      animation: blink 1s step-end infinite;
+      color: #60a5fa;
+      margin-left: 2px;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
+    .team-card {
+      background: #1c1c22;
+      border: 1px solid #2a2a35;
+      border-radius: 14px;
+      padding: 1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      transition: all 0.25s;
+    }
+
+    .team-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      background: #202028;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      color: white;
+    }
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2a2a35;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .nav-dot.active {
+      background: #3b82f6;
+      transform: scale(1.3);
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .flag {
+      font-size: 1.5rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #60a5fa;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .v-div {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, #2a2a35, transparent);
+      align-self: stretch;
+    }
+    footer {
+      scroll-snap-align: start;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.8rem !important;
+      }
+
+      .translate-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .v-div {
+        display: none;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+    .french-word {
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 0 2px;
+      margin: 0 1px;
+      transition: background 0.18s, color 0.18s;
+      position: relative;
+    }
+
+    .french-word:hover {
+      background: rgba(59, 130, 246, 0.18);
+      color: #93c5fd;
+    }
+
+    .french-word::after {
+      content: '';
+      display: block;
+      height: 1px;
+      background: rgba(96, 165, 250, 0.4);
+      border-radius: 1px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+
+    .french-word:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* Word popup */
+    #word-popup {
+      position: fixed;
+      z-index: 9999;
+      min-width: 260px;
+      max-width: 340px;
+      background: #1a1a24;
+      border: 1px solid #2a2a35;
+      border-radius: 16px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(59, 130, 246, 0.1), 0 0 40px rgba(59, 130, 246, 0.08);
+      padding: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+    }
+
+    #word-popup.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+
+    .popup-header {
+      background: linear-gradient(135deg, #1d2d50, #0f1929);
+      border-bottom: 1px solid #2a2a35;
+      padding: 12px 16px 10px;
+    }
+
+    .popup-word {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #93c5fd;
+      line-height: 1.2;
+    }
+
+    .popup-pos {
+      font-size: 0.7rem;
+      color: #60a5fa;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-top: 2px;
+      opacity: 0.8;
+    }
+
+    .popup-body {
+      padding: 12px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .popup-meaning {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+
+    .popup-example-block {
+      background: rgba(59, 130, 246, 0.07);
+      border-left: 2px solid rgba(59, 130, 246, 0.35);
+      border-radius: 0 8px 8px 0;
+      padding: 8px 10px;
+    }
+
+    .popup-example {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: #93c5fd;
+      line-height: 1.5;
+    }
+
+    .popup-example-en {
+      font-size: 0.76rem;
+      color: #64748b;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .popup-loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      color: #64748b;
+      font-size: 0.82rem;
+    }
+
+    .popup-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      border-top-color: #60a5fa;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 0.8rem;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .popup-close:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+    }
+
+    .word-hint {
+      font-size: 0.72rem;
+      color: #3b82f6;
+      opacity: 0.7;
+      letter-spacing: 0.03em;
+      text-align: right;
+      margin-top: 2px;
+    }
+
+    /* Chatbot styles */
+    .chat-container {
+      background: #16161a;
+      border: 1px solid #2a2a35;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #chat-messages {
+      scrollbar-width: thin;
+      scrollbar-color: #3b82f6 #0e0e10;
+    }
+
+    #chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #chat-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #chat-messages::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 2px;
+    }
+
+    .chat-message {
+      display: flex;
+      gap: 2px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-user {
+      justify-content: flex-end;
+    }
+
+    .message-bot {
+      justify-content: flex-start;
+    }
+
+    .chat-bubble {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .bubble-user {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .bubble-bot {
+      background: rgba(59, 130, 246, 0.15);
+      color: #cbd5e1;
+      border-bottom-left-radius: 4px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .culture-spinner {
+      animation: spin 0.8s linear infinite;
+    }
+
+    #culture-input {
+      max-height: 120px;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="nav-dots" class="fixed right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+    <div class="nav-dot active" data-section="0" title="Home"></div>
+    <div class="nav-dot" data-section="1" title="Translate"></div>
+    <div class="nav-dot" data-section="2" title="Architecture"></div>
+    <div class="nav-dot" data-section="3" title="Culture Bot"></div>
+    <div class="nav-dot" data-section="4" title="About"></div>
+  </div>
+
+  <section id="section-0" class="relative grid-bg flex flex-col items-center justify-center text-center px-6">
+
+    <div class="orb orb-blue w-96 h-96 top-[-80px] right-[-60px] opacity-60"></div>
+    <div class="orb orb-indigo w-80 h-80 bottom-[-60px] left-[-40px] opacity-50"></div>
+
+    <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-6">
+
+      <div class="badge reveal visible" style="transition-delay:0.1s">
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+          <circle cx="4" cy="4" r="4" fill="#60a5fa" />
+        </svg>
+        AI-Powered · Works offline
+      </div>
+
+
+      <div class="animate-float">
+        <h1 class="hero-title font-space font-bold tracking-tight"
+          style="font-size:4.5rem; line-height:1.08; background: linear-gradient(135deg, #fff 30%, #60a5fa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+          Quasso
+        </h1>
+      </div>
+
+      <p class="text-slate-400 text-lg max-w-xl leading-relaxed reveal visible" style="transition-delay:0.2s">
+        Parlez en <span class="text-white font-medium">anglais</span> ou en <span
+          class="text-white font-medium">hinglish</span> — nous le traduirons en <span
+          class="text-blue-400 font-semibold">français</span>. Propulsé par un modèle d’IA local entraîné sur de vrais
+        sous-titres de films.
+      </p>
+
+
+      <div class="flex items-center gap-4 reveal visible" style="transition-delay:0.3s">
+        <div class="flex items-center gap-2 bg-surface rounded-xl px-4 py-2 border border-border">
+          <span class="flag">🇮🇳</span>
+          <span class="text-sm font-medium text-slate-300">Hinglish / Anglais</span>
+        </div>
+        <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+          <path d="M4 8h16M14 3l6 5-6 5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <div class="flex items-center gap-2 bg-surface rounded-xl px-4 py-2 border border-border">
+          <span class="flag">🇫🇷</span>
+          <span class="text-sm font-medium text-blue-400">Français</span>
+        </div>
+      </div>
+
+      <a href="#section-1" onclick="scrollToSection(1)" class="mt-2 btn-translate text-base px-8 py-3 reveal visible"
+        style="transition-delay:0.4s; text-decoration:none;">
+        Try It Now
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+
+
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-40">
+        <span class="text-xs tracking-widest uppercase text-slate-500">Scroll</span>
+        <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+          <rect x="6" y="1" width="4" height="8" rx="2" stroke="#94a3b8" stroke-width="1.5" />
+          <path d="M8 13v4M5 15l3 3 3-3" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="section-1" class="relative flex flex-col items-center justify-center px-6 py-12">
+    <div class="orb orb-blue w-72 h-72 top-1/2 left-[-80px] -translate-y-1/2 opacity-30"></div>
+
+    <div class="relative z-10 w-full max-w-4xl flex flex-col gap-6">
+
+      <div class="flex flex-col items-center gap-2 text-center">
+        <div class="badge">Translator</div>
+        <h2 class="font-space font-bold text-3xl text-white mt-1">Translate to French</h2>
+        <p class="text-slate-500 text-sm">Tapez n’importe quoi en anglais ou en hinglish, puis appuyez sur Traduire .
+        </p>
+      </div>
+
+      <div class="grid translate-grid gap-4" style="grid-template-columns: 1fr auto 1fr;">
+
+        <div class="translate-box p-5 flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <span class="flag text-xl">🇮🇳</span>
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">English / Hinglish</span>
+          </div>
+          <textarea id="input-text" rows="7" placeholder="Type something like " How are you?"
+            or "Yaar, mujhe bhookh lag rahi hai" ..."></textarea>
+          <div class="flex items-center justify-between pt-1 border-t border-border">
+            <span id="char-count" class="text-xs text-slate-600">0 / 500</span>
+            <button id="clear-btn" onclick="clearAll()"
+              class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Clear</button>
+          </div>
+        </div>
+
+        <div class="v-div"></div>
+        <div class="hidden md:flex items-center" style="display:none"><!-- spacer --></div>
+
+        <!-- Output -->
+        <div class="translate-box p-5 flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <span class="flag text-xl">🇫🇷</span>
+            <span class="text-xs font-semibold uppercase tracking-widest text-blue-400">Français</span>
+          </div>
+          <div id="output-text" class="output-box flex-1">
+            <span class="text-slate-600 text-base font-normal" id="output-placeholder">La traduction apparaîtra
+              ici…</span>
+          </div>
+          <div id="word-hint" class="word-hint hidden">💡 Click any word to see its meaning</div>
+          <div class="flex items-center justify-between pt-1 border-t border-border">
+            <span id="output-status" class="text-xs text-slate-600"></span>
+            <button id="copy-btn" onclick="copyOutput()"
+              class="text-xs text-slate-500 hover:text-blue-400 transition-colors hidden">Copier</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <button id="translate-btn" onclick="doTranslate()" class="btn-translate px-10 py-3 text-base">
+          <div class="spinner"></div>
+          <svg class="btn-text" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M2 9C2 5.13 5.13 2 9 2M16 9c0 3.87-3.13 7-7 7" stroke="#fff" stroke-width="2"
+              stroke-linecap="round" />
+            <path d="M14 6l2-2-2-2M4 14l-2 2 2 2" stroke="#fff" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span class="btn-text">Traduire</span>
+        </button>
+      </div>
+
+      <div class="flex flex-wrap gap-2 justify-center">
+        <span class="text-xs text-slate-600 self-center mr-1">Try:</span>
+        <button onclick="setExample('Hello')"
+          class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">"Hello"</button>
+        <button onclick="setExample('How are you?')"
+          class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">"How
+          are you?"</button>
+        <button onclick="setExample('Good morning')"
+          class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">"Good
+          morning"</button>
+        <button onclick="setExample('Thank you very much')"
+          class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">"Thank
+          you very much"</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="section-2" class="relative flex flex-col items-center justify-center px-6 py-10 overflow-hidden">
+    <div class="orb orb-blue w-80 h-80 top-[-60px] left-[-60px] opacity-20"></div>
+    <div class="orb orb-indigo w-72 h-72 bottom-[-40px] right-[-40px] opacity-20"></div>
+
+    <div class="relative z-10 w-full max-w-6xl flex flex-col items-center gap-6">
+      <div class="flex flex-col items-center gap-2 text-center">
+        <div class="badge">Architecture</div>
+        <h2 class="font-space font-bold text-3xl text-white mt-1">How Quasso Works</h2>
+        <p class="text-slate-500 text-sm">Translation pipeline & system sequence flow</p>
+      </div>
+      <div class="flex gap-2">
+        <button id="tab-flow" onclick="showDiagram('flow')" class="text-xs px-4 py-1.5 rounded-full border border-blue-500 text-blue-400 bg-blue-500/10 font-semibold transition-all">① Flow Diagram</button>
+        <button id="tab-seq" onclick="showDiagram('seq')" class="text-xs px-4 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">② Sequence Diagram</button>
+      </div>
+
+      <div id="diag-flow" class="w-full flex justify-center">
+        <svg viewBox="0 0 860 320" width="100%" style="max-height:320px; max-width:860px;" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+            </marker>
+            <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#22c55e"/>
+            </marker>
+            <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#f87171"/>
+            </marker>
+            <marker id="arr-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+            </marker>
+          </defs>
+
+          <rect x="280" y="30" width="340" height="170" rx="6" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="288" y="47" font-size="11" fill="#64748b">Gemma by Google</text>
+          <rect x="290" y="55" width="200" height="130" rx="4" fill="none" stroke="#1e3a5f" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="298" y="72" font-size="10" fill="#475569">(Hinglish to english)</text>
+
+          <rect x="20" y="200" width="120" height="60" rx="10" fill="#2563eb" opacity="0.9"/>
+          <text x="80" y="225" text-anchor="middle" font-size="13" font-weight="600" fill="white">Get</text>
+          <text x="80" y="242" text-anchor="middle" font-size="13" font-weight="600" fill="white">Text</text>
+
+          <polygon points="230,230 280,200 330,230 280,260" fill="none" stroke="#38bdf8" stroke-width="2"/>
+          <text x="280" y="226" text-anchor="middle" font-size="10" fill="#e2e8f0">Is it</text>
+          <text x="280" y="240" text-anchor="middle" font-size="10" fill="#e2e8f0">english?</text>
+
+          <rect x="390" y="90" width="140" height="70" rx="10" fill="#3b82f6" opacity="0.85"/>
+          <text x="460" y="120" text-anchor="middle" font-size="12" font-weight="600" fill="white">Translate to</text>
+          <text x="460" y="137" text-anchor="middle" font-size="12" font-weight="600" fill="white">english</text>
+
+          <rect x="480" y="200" width="150" height="60" rx="10" fill="#2563eb" opacity="0.9"/>
+          <text x="555" y="225" text-anchor="middle" font-size="12" font-weight="600" fill="white">Translate to</text>
+          <text x="555" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="white">french</text>
+
+          <polygon points="680,200 730,200 750,260 700,260" fill="#ec4899" opacity="0.9"/>
+          <text x="715" y="232" text-anchor="middle" font-size="13" font-weight="600" fill="white">Data</text>
+
+          <line x1="140" y1="230" x2="226" y2="230" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#arr)"/>
+
+          <line x1="330" y1="230" x2="478" y2="230" stroke="#22c55e" stroke-width="1.8" marker-end="url(#arr-green)"/>
+          <text x="400" y="222" text-anchor="middle" font-size="11" font-weight="600" fill="#22c55e">Yes</text>
+
+          <path d="M280,200 C280,140 310,125 388,125" stroke="#f87171" stroke-width="1.8" fill="none" marker-end="url(#arr-red)"/>
+          <text x="295" y="162" font-size="11" font-weight="600" fill="#f87171">No</text>
+
+          <path d="M530,125 C572,125 557,178 555,200" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#arr-gray)"/>
+
+          <line x1="630" y1="230" x2="678" y2="230" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#arr)"/>
+        </svg>
+      </div>
+
+      <div id="diag-seq" class="w-full flex justify-center" style="display:none">
+        <svg viewBox="0 0 820 470" width="100%" style="max-height:470px; max-width:820px;" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+
+          <defs>
+            <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3b82f6"/></marker>
+            <marker id="arr2l" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3b82f6"/></marker>
+          </defs>
+
+          <rect x="55" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="110" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">User</text>
+          <rect x="235" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="290" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">UI</text>
+          <rect x="415" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="470" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">Backend</text>
+          <rect x="595" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="650" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">AI Model</text>
+
+          <line x1="110" y1="62" x2="110" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <line x1="290" y1="62" x2="290" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <line x1="470" y1="62" x2="470" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <line x1="650" y1="62" x2="650" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+          <line x1="110" y1="95" x2="283" y2="95" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="196" y="90" text-anchor="middle" font-size="10" fill="#cbd5e1">Enter text (French/English input)</text>
+
+          <line x1="290" y1="130" x2="463" y2="130" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="376" y="124" text-anchor="middle" font-size="9.5" fill="#cbd5e1">POST /translate {text, sourceLang?, targetLang="fr"}</text>
+
+          <line x1="470" y1="165" x2="643" y2="165" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="556" y="159" text-anchor="middle" font-size="9.5" fill="#cbd5e1">Translate(text, sourceLang, targetLang)</text>
+
+          <line x1="643" y1="200" x2="477" y2="200" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr2l)"/>
+          <text x="556" y="194" text-anchor="middle" font-size="9.5" fill="#94a3b8">translation + token/traceId</text>
+
+          <line x1="463" y1="235" x2="297" y2="235" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr2l)"/>
+          <text x="376" y="229" text-anchor="middle" font-size="9.5" fill="#94a3b8">200 OK {translation, traceId}</text>
+
+          <line x1="283" y1="270" x2="117" y2="270" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr2l)"/>
+          <text x="196" y="264" text-anchor="middle" font-size="10" fill="#94a3b8">Display translation</text>
+
+          <line x1="60" y1="285" x2="760" y2="285" stroke="#1e293b" stroke-width="1"/>
+
+          <line x1="110" y1="305" x2="283" y2="305" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="196" y="299" text-anchor="middle" font-size="10" fill="#cbd5e1">Click word in translation</text>
+
+          <line x1="290" y1="335" x2="463" y2="335" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="376" y="329" text-anchor="middle" font-size="9.5" fill="#cbd5e1">GET /meaning?word=...&amp;context=...</text>
+
+          <line x1="470" y1="362" x2="643" y2="362" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="556" y="356" text-anchor="middle" font-size="9.5" fill="#cbd5e1">Define(word, context) + examples</text>
+
+          <line x1="643" y1="390" x2="477" y2="390" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr2l)"/>
+          <text x="556" y="384" text-anchor="middle" font-size="9" fill="#94a3b8">meaning + examples + pronunciation</text>
+
+          <line x1="463" y1="415" x2="297" y2="415" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr2l)"/>
+          <text x="376" y="409" text-anchor="middle" font-size="9.5" fill="#94a3b8">200 OK {meaning, examples, pronunciation?}</text>
+
+          <line x1="283" y1="445" x2="117" y2="445" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr2l)"/>
+          <text x="196" y="439" text-anchor="middle" font-size="10" fill="#94a3b8">Show meaning tooltip/panel</text>
+        </svg>
+      </div>
+
+      <p class="text-slate-600 text-xs">↑ Scroll down for Team · Use tabs to switch diagrams</p>
+    </div>
+  </section>
+
+  <section id="section-3" class="relative flex flex-col items-center justify-center px-6 py-12">
+    <div class="orb orb-blue w-80 h-80 top-1/2 right-[-80px] -translate-y-1/2 opacity-30"></div>
+
+    <div class="relative z-10 w-full max-w-4xl flex flex-col gap-6 h-full">
+
+      <div class="flex flex-col items-center gap-2 text-center">
+        <div class="badge">🇫🇷 Culture</div>
+        <h2 class="font-space font-bold text-3xl text-white mt-1">French Culture Chatbot</h2>
+        <p class="text-slate-500 text-sm">Ask questions about French culture, history, cuisine & traditions</p>
+      </div>
+
+      <div class="chat-container translate-box flex-1 flex flex-col overflow-hidden">
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 scroll-smooth">
+          <div class="flex justify-start">
+            <div class="bg-blue-500/20 text-blue-300 rounded-lg px-4 py-2 max-w-xs text-sm">
+              Bonjour! 👋 Ask me anything about French culture, history, food, traditions, or lifestyle!
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-border p-3">
+          <div class="flex gap-2">
+            <textarea id="culture-input" rows="2" placeholder="What do you want to know about France?" class="flex-1 bg-transparent resize-none outline-none border border-border rounded-lg px-3 py-2 text-sm text-slate-300 focus:border-blue-500" style="font-family: 'Inter', sans-serif;"></textarea>
+            <button onclick="sendCultureMessage()" class="btn-translate px-4 py-2 self-end">
+              <svg class="culture-spinner hidden" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" stroke-dasharray="11" opacity="0.3"/>
+                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" stroke-dasharray="11" style="stroke-dashoffset: 11; animation: spin 0.8s linear infinite;"/>
+              </svg>
+              <span class="culture-btn-text">Send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 justify-center">
+        <span class="text-xs text-slate-600 self-center mr-1">Quick questions:</span>
+        <button onclick="setCultureExample('What are the main French holidays?')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Holidays</button>
+        <button onclick="setCultureExample('Tell me about French cuisine')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Cuisine</button>
+        <button onclick="setCultureExample('What is the Eiffel Tower?')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Landmarks</button>
+        <button onclick="setCultureExample('Tell me about French art')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Art & Culture</button>
+      </div>
+    </div>
+  </section>
+
+  <footer id="section-4" class="relative flex flex-col items-center justify-center px-6 py-12 text-center">
+    <div class="orb orb-indigo w-80 h-80 top-0 right-0 opacity-25"></div>
+    <div class="orb orb-blue w-64 h-64 bottom-0 left-0 opacity-20"></div>
+
+    <div class="relative z-10 w-full max-w-3xl flex flex-col items-center gap-10">
+      <div class="flex flex-col items-center gap-2">
+        <div class="badge">The Team</div>
+        <h2 class="font-space font-bold text-3xl text-white mt-1">Fait avec une touche française</h2>
+        <p class="text-slate-500 text-sm max-w-sm">Un projet étudiant réalisé pour un PBL de français, avec passion.</p>
+      </div>
+
+      <div class="team-grid w-full" style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div class="team-card">
+          <div class="avatar">AR</div>
+          <div class="text-left">
+            <div class="font-semibold text-sm text-white">Aditya Raj</div>
+            <div class="text-xs text-slate-500 mt-0.5">RA2511028010001</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">KS</div>
+          <div class="text-left">
+            <div class="font-semibold text-sm text-white">Konakalla Manohara Sanjay</div>
+            <div class="text-xs text-slate-500 mt-0.5">RA2511027010057</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">SM</div>
+          <div class="text-left">
+            <div class="font-semibold text-sm text-white">Sriharshini Munagala</div>
+            <div class="text-xs text-slate-500 mt-0.5">RA2511027010038</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">SP</div>
+          <div class="text-left">
+            <div class="font-semibold text-sm text-white">S. Puneeth Reddy</div>
+            <div class="text-xs text-slate-500 mt-0.5">RA2511027010089</div>
+          </div>
+        </div>
+        <div class="team-card" style="grid-column: 1 / -1;">
+          <div class="avatar">MP</div>
+          <div class="text-left">
+            <div class="font-semibold text-sm text-white">M. Praveen</div>
+            <div class="text-xs text-slate-500 mt-0.5">RA2511027010055</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col items-center gap-2 max-w-md">
+        <div class="text-xs text-slate-600 uppercase tracking-widest font-medium">Training Data</div>
+        <p class="text-sm text-slate-400">
+          « Modèle entraîné sur des sous-titres de films provenant de »
+          <a href="https://www.opensubtitles.org" target="_blank" rel="noopener"
+            class="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors">
+            opensubtitles.org
+          </a>
+        </p>
+
+        <div class="flex items-center gap-2 mt-1 text-slate-600 text-xs">
+          <span>Powered by</span>
+          <span class="font-semibold text-slate-400">Ollama</span>
+          <span>·</span>
+          <span class="font-semibold text-blue-400">Quasso</span>
+          <span>·</span>
+          <span>© 2026</span>
+        </div>
+        <div class="flex items-center gap-2 mt-1 text-slate-600 text-xs">
+          <span>Design by</span>
+          <span class="font-semibold text-slate-400">Aditya</span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="word-popup" role="tooltip" aria-live="polite">
+    <button class="popup-close" id="popup-close-btn" onclick="closeWordPopup()" title="Close">✕</button>
+    <div id="popup-content">
+      <div class="popup-loading">
+        <div class="popup-spinner"></div>
+        <span>Looking up word…</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = [
+      document.getElementById('section-0'),
+      document.getElementById('section-1'),
+      document.getElementById('section-2'),
+      document.getElementById('section-3'),
+      document.getElementById('section-4'),
+    ];
+    const dots = document.querySelectorAll('.nav-dot');
+
+    function scrollToSection(i) {
+      sections[i].scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ---- Diagram tab switcher ----
+    function showDiagram(which) {
+      const flow = document.getElementById('diag-flow');
+      const seq  = document.getElementById('diag-seq');
+      const tabFlow = document.getElementById('tab-flow');
+      const tabSeq  = document.getElementById('tab-seq');
+
+      if (which === 'flow') {
+        flow.style.display = 'flex';
+        seq.style.display  = 'none';
+        tabFlow.classList.add('border-blue-500','text-blue-400','bg-blue-500/10','font-semibold');
+        tabFlow.classList.remove('border-border','text-slate-400');
+        tabSeq.classList.remove('border-blue-500','text-blue-400','bg-blue-500/10','font-semibold');
+        tabSeq.classList.add('border-border','text-slate-400');
+      } else {
+        seq.style.display  = 'flex';
+        flow.style.display = 'none';
+        tabSeq.classList.add('border-blue-500','text-blue-400','bg-blue-500/10','font-semibold');
+        tabSeq.classList.remove('border-border','text-slate-400');
+        tabFlow.classList.remove('border-blue-500','text-blue-400','bg-blue-500/10','font-semibold');
+        tabFlow.classList.add('border-border','text-slate-400');
+      }
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => scrollToSection(i));
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = sections.indexOf(entry.target);
+          dots.forEach(d => d.classList.remove('active'));
+          if (idx >= 0) dots[idx].classList.add('active');
+        }
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach(s => observer.observe(s));
+
+    const inputEl = document.getElementById('input-text');
+    const charCount = document.getElementById('char-count');
+    inputEl.addEventListener('input', () => {
+      const len = inputEl.value.length;
+      charCount.textContent = `${len} / 500`;
+      if (len > 500) inputEl.value = inputEl.value.slice(0, 500);
+    });
+
+    async function doTranslate() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      const btn = document.getElementById('translate-btn');
+      const outputEl = document.getElementById('output-text');
+      const statusEl = document.getElementById('output-status');
+      const copyBtn = document.getElementById('copy-btn');
+
+      btn.classList.add('loading');
+      btn.disabled = true;
+      outputEl.innerHTML = '<span class="text-slate-600 text-sm">Translating...</span>';
+      statusEl.textContent = '';
+      copyBtn.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: text })
+        });
+
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        const translation = (data.response || '').trim().replace(/\\n/g, ' ').replace(/\n/g, ' ').replace(/\s+/g, ' ');
+
+        if (!translation) throw new Error('Empty response from model');
+
+        outputEl.innerHTML = '';
+        outputEl.classList.add('cursor');
+        let i = 0;
+        const typeInterval = setInterval(() => {
+          outputEl.textContent += translation[i];
+          i++;
+          if (i >= translation.length) {
+            clearInterval(typeInterval);
+            outputEl.classList.remove('cursor');
+            statusEl.textContent = '✓ Translation complete';
+            copyBtn.classList.remove('hidden');
+            makeWordsClickable(outputEl, translation);
+            document.getElementById('word-hint').classList.remove('hidden');
+          }
+        }, 18);
+
+      } catch (err) {
+        outputEl.innerHTML = `<span class="text-red-400 text-sm">⚠ ${err.message || 'Could not connect to Ollama. Make sure it is running on port 11434.'}</span>`;
+        statusEl.textContent = '';
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    inputEl.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') doTranslate();
+    });
+
+    function clearAll() {
+      inputEl.value = '';
+      charCount.textContent = '0 / 500';
+      document.getElementById('output-text').innerHTML = '<span class="text-slate-600 text-base font-normal">Translation will appear here...</span>';
+      document.getElementById('output-status').textContent = '';
+      document.getElementById('copy-btn').classList.add('hidden');
+      document.getElementById('word-hint').classList.add('hidden');
+      closeWordPopup();
+    }
+
+    function setExample(text) {
+      inputEl.value = text;
+      charCount.textContent = `${text.length} / 500`;
+      inputEl.focus();
+    }
+
+    function copyOutput() {
+
+      const text = document.getElementById('output-text').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copier', 1500);
+      });
+    }
+
+    const wordMeaningCache = {};
+    let activeWordEl = null;
+
+    function makeWordsClickable(container, text) {
+      const tokens = text.split(/(\s+|[''"«»,;:!?.()/])/g).filter(t => t !== '' && t !== undefined);
+      container.innerHTML = '';
+      tokens.forEach(token => {
+
+        if (/[\wàâäéèêëîïôùûüçœæÀÂÄÉÈÊËÎÏÔÙÛÜÇŒÆ'-]+/.test(token) && token.trim().length > 1) {
+          const cleanWord = token.replace(/[''"«»,;:!?.()/]/g, '');
+          const span = document.createElement('span');
+          span.className = 'french-word';
+          span.textContent = token;
+          span.dataset.word = cleanWord;
+          span.setAttribute('role', 'button');
+          span.setAttribute('tabindex', '0');
+          span.setAttribute('aria-label', `Click to see meaning of "${cleanWord}"`);
+          span.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showWordMeaning(cleanWord, span);
+          });
+          span.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') showWordMeaning(cleanWord, span);
+          });
+          container.appendChild(span);
+        } else {
+          container.appendChild(document.createTextNode(token));
+        }
+      });
+    }
+
+    async function showWordMeaning(word, triggerEl) {
+      const popup = document.getElementById('word-popup');
+      const content = document.getElementById('popup-content');
+
+      if (activeWordEl) activeWordEl.style.background = '';
+      activeWordEl = triggerEl;
+      triggerEl.style.background = 'rgba(59,130,246,0.25)';
+
+      const rect = triggerEl.getBoundingClientRect();
+      positionPopup(popup, rect);
+
+      content.innerHTML = `
+        <div class="popup-header" style="display:flex; align-items:flex-start; gap:8px;">
+          <div>
+            <div class="popup-word">${word}</div>
+            <div class="popup-pos">Looking up…</div>
+          </div>
+        </div>
+        <div class="popup-loading">
+          <div class="popup-spinner"></div>
+          <span>Asking the AI tutor…</span>
+        </div>`;
+      popup.classList.add('visible');
+
+      if (wordMeaningCache[word.toLowerCase()]) {
+        renderWordPopup(wordMeaningCache[word.toLowerCase()]);
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/word-meaning', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ word })
+        });
+        const json = await res.json();
+        if (json.success && json.data) {
+          wordMeaningCache[word.toLowerCase()] = json.data;
+          renderWordPopup(json.data);
+        } else {
+          renderWordPopup({ word, meaning: 'Could not fetch meaning. Try again.', partOfSpeech: '', example: '', exampleTranslation: '' });
+        }
+      } catch (e) {
+        renderWordPopup({ word, meaning: 'Network error. Make sure the server is running.', partOfSpeech: '', example: '', exampleTranslation: '' });
+      }
+    }
+
+    function renderWordPopup(data) {
+      const content = document.getElementById('popup-content');
+      content.innerHTML = `
+        <div class="popup-header">
+          <div class="popup-word">${data.word}</div>
+          ${data.partOfSpeech ? `<div class="popup-pos">${data.partOfSpeech}</div>` : ''}
+        </div>
+        <div class="popup-body">
+          <div class="popup-meaning">${escapeHtml(data.meaning)}</div>
+          ${data.example ? `
+          <div class="popup-example-block">
+            <div class="popup-example">« ${escapeHtml(data.example)} »</div>
+            ${data.exampleTranslation ? `<div class="popup-example-en">${escapeHtml(data.exampleTranslation)}</div>` : ''}
+          </div>` : ''}
+        </div>`;
+    }
+
+    function positionPopup(popup, triggerRect) {
+      popup.style.left = '';
+      popup.style.right = '';
+      popup.style.top = '';
+      popup.style.bottom = '';
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const popupW = 300;
+      const popupH = 200;
+      const margin = 12;
+
+      let left = triggerRect.left;
+      let top = triggerRect.bottom + margin;
+
+      if (left + popupW > vw - margin) left = vw - popupW - margin;
+      if (left < margin) left = margin;
+      if (top + popupH > vh - margin) top = triggerRect.top - popupH - margin;
+      if (top < margin) top = margin;
+
+      popup.style.left = left + 'px';
+      popup.style.top = top + 'px';
+    }
+
+    function closeWordPopup() {
+      const popup = document.getElementById('word-popup');
+      popup.classList.remove('visible');
+      if (activeWordEl) { activeWordEl.style.background = ''; activeWordEl = null; }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    document.addEventListener('click', (e) => {
+      const popup = document.getElementById('word-popup');
+      if (!popup.contains(e.target)) closeWordPopup();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeWordPopup();
+    });
+
+    // ---- French Culture Chatbot ----
+    async function sendCultureMessage() {
+      const input = document.getElementById('culture-input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const messagesContainer = document.getElementById('chat-messages');
+      const btn = document.querySelector('button[onclick="sendCultureMessage()"]');
+
+      // Add user message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'chat-message message-user';
+      userDiv.innerHTML = `<div class="chat-bubble bubble-user">${escapeHtml(message)}</div>`;
+      messagesContainer.appendChild(userDiv);
+
+      // Disable input and show loading
+      input.value = '';
+      btn.disabled = true;
+      const spinner = btn.querySelector('.culture-spinner');
+      const btnText = btn.querySelector('.culture-btn-text');
+      spinner.classList.remove('hidden');
+      btnText.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/culture-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        // Add bot response
+        const botDiv = document.createElement('div');
+        botDiv.className = 'chat-message message-bot';
+        botDiv.innerHTML = `<div class="chat-bubble bubble-bot">${escapeHtml(data.response || 'No response')}</div>`;
+        messagesContainer.appendChild(botDiv);
+
+        // Scroll to bottom
+        setTimeout(() => messagesContainer.scrollTop = messagesContainer.scrollHeight, 50);
+      } catch (err) {
+        const botDiv = document.createElement('div');
+        botDiv.className = 'chat-message message-bot';
+        botDiv.innerHTML = `<div class="chat-bubble bubble-bot text-red-400">⚠ ${escapeHtml(err.message || 'Connection error')}</div>`;
+        messagesContainer.appendChild(botDiv);
+      } finally {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+        btnText.classList.remove('hidden');
+        input.focus();
+      }
+    }
+
+    function setCultureExample(text) {
+      document.getElementById('culture-input').value = text;
+      document.getElementById('culture-input').focus();
+    }
+
+    // Allow Enter to send message
+    document.getElementById('culture-input').addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        sendCultureMessage();
+      }
+    });
+  </script>
+</body>
+
+</html>
