@@ -11,13 +11,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
+<<<<<<< HEAD
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+=======
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Space+Mono:wght@400;700&display=swap"
+>>>>>>> e17de01 (new ui)
     rel="stylesheet" />
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
+<<<<<<< HEAD
             inter: ['Inter', 'sans-serif'],
             space: ['Space Grotesk', 'sans-serif'],
           },
@@ -53,6 +58,32 @@
               '0%, 100%': { transform: 'translateY(0px)' },
               '50%': { transform: 'translateY(-10px)' },
             }
+=======
+            display: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          colors: {
+            cream: '#FFFDF5',
+            dark: '#1a1a1a',
+            surface: '#FFFDF5',
+            card: '#ffffff',
+            border: '#1a1a1a',
+            accent: { yellow: '#FFE156', lime: '#BFFF00', blue: '#4F46E5', pink: '#FF6B9D', orange: '#FF8A3D' },
+            blue: { 400: '#4F46E5', 500: '#4338CA' },
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.5s ease forwards',
+            'blink': 'blink 1s step-end infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'marquee': 'marquee 20s linear infinite',
+          },
+          keyframes: {
+            fadeUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+            blink: { '0%,100%': { opacity: 1 }, '50%': { opacity: 0 } },
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-8px)' } },
+            marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+>>>>>>> e17de01 (new ui)
           }
         }
       }
@@ -72,13 +103,20 @@
     }
 
     body {
+<<<<<<< HEAD
       background: #0e0e10;
       font-family: 'Inter', sans-serif;
       color: #e2e8f0;
+=======
+      background: #FFFDF5;
+      font-family: 'DM Sans', sans-serif;
+      color: #1a1a1a;
+>>>>>>> e17de01 (new ui)
     }
 
     section {
       scroll-snap-align: start;
+<<<<<<< HEAD
       height: 100dvh;
       overflow: hidden;
     }
@@ -94,10 +132,37 @@
       background: #3b82f6;
       border-radius: 99px;
     }
+=======
+      min-height: 100dvh;
+      overflow: hidden;
+    }
+
+    footer {
+      scroll-snap-align: start;
+      min-height: 100dvh;
+      overflow: hidden;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #FFFDF5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1a1a1a;
+      border-radius: 0;
+    }
+
+    /* Dot grid background */
+>>>>>>> e17de01 (new ui)
     body::before {
       content: '';
       position: fixed;
       inset: 0;
+<<<<<<< HEAD
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 100;
@@ -132,20 +197,80 @@
     .translate-box:focus-within {
       border-color: #3b82f6;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+=======
+      z-index: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.08;
+    }
+
+    /* Neo-brutalist card */
+    .neo-card {
+      background: #fff;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 4px 4px 0 #1a1a1a;
+      transition: all 0.2s;
+    }
+
+    .neo-card:hover {
+      box-shadow: 6px 6px 0 #1a1a1a;
+      transform: translate(-1px, -1px);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 1rem;
+      background: #FFE156;
+      border: 2px solid #1a1a1a;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      box-shadow: 2px 2px 0 #1a1a1a;
+    }
+
+    /* Translate boxes */
+    .translate-box {
+      background: #fff;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 4px 4px 0 #1a1a1a;
+      transition: all 0.2s;
+    }
+
+    .translate-box:focus-within {
+      border-color: #4F46E5;
+      box-shadow: 4px 4px 0 #4F46E5;
+>>>>>>> e17de01 (new ui)
     }
 
     textarea {
       background: transparent;
       resize: none;
       outline: none;
+<<<<<<< HEAD
       color: #e2e8f0;
       width: 100%;
       font-family: 'Inter', sans-serif;
+=======
+      color: #1a1a1a;
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+>>>>>>> e17de01 (new ui)
       font-size: 1rem;
       line-height: 1.6;
     }
 
     textarea::placeholder {
+<<<<<<< HEAD
       color: #4a4a5a;
     }
 
@@ -172,6 +297,37 @@
 
     .btn-translate:active {
       transform: scale(0.97);
+=======
+      color: #999;
+    }
+
+    /* Buttons */
+    .btn-translate {
+      background: #4F46E5;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.7rem 2rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 4px 4px 0 #1a1a1a;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .btn-translate:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 #1a1a1a;
+    }
+
+    .btn-translate:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 #1a1a1a;
+>>>>>>> e17de01 (new ui)
     }
 
     .btn-translate:disabled {
@@ -184,7 +340,11 @@
       min-height: 120px;
       font-size: 1.1rem;
       font-family: 'Space Grotesk', sans-serif;
+<<<<<<< HEAD
       color: #93c5fd;
+=======
+      color: #4F46E5;
+>>>>>>> e17de01 (new ui)
       line-height: 1.7;
       letter-spacing: 0.01em;
     }
@@ -192,7 +352,11 @@
     .spinner {
       width: 18px;
       height: 18px;
+<<<<<<< HEAD
       border: 2px solid rgba(255, 255, 255, 0.3);
+=======
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+>>>>>>> e17de01 (new ui)
       border-top-color: #fff;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
@@ -212,6 +376,7 @@
     .loading .btn-text {
       display: none;
     }
+<<<<<<< HEAD
     .cursor::after {
       content: '|';
       animation: blink 1s step-end infinite;
@@ -234,10 +399,26 @@
       background: #1c1c22;
       border: 1px solid #2a2a35;
       border-radius: 14px;
+=======
+
+    .cursor::after {
+      content: '|';
+      animation: blink 1s step-end infinite;
+      color: #4F46E5;
+      margin-left: 2px;
+    }
+
+    /* Team cards */
+    .team-card {
+      background: #fff;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 12px;
+>>>>>>> e17de01 (new ui)
       padding: 1rem 1.4rem;
       display: flex;
       align-items: center;
       gap: 0.9rem;
+<<<<<<< HEAD
       transition: all 0.25s;
     }
 
@@ -250,6 +431,20 @@
     .avatar {
       width: 42px;
       height: 42px;
+=======
+      transition: all 0.2s;
+      box-shadow: 3px 3px 0 #1a1a1a;
+    }
+
+    .team-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 #1a1a1a;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+>>>>>>> e17de01 (new ui)
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -257,6 +452,7 @@
       font-weight: 700;
       font-size: 0.9rem;
       flex-shrink: 0;
+<<<<<<< HEAD
       background: linear-gradient(135deg, #2563eb, #60a5fa);
       color: white;
     }
@@ -265,11 +461,27 @@
       height: 8px;
       border-radius: 50%;
       background: #2a2a35;
+=======
+      background: #FFE156;
+      color: #1a1a1a;
+      border: 2px solid #1a1a1a;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Nav dots */
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 0;
+      background: #ccc;
+      border: 2px solid #1a1a1a;
+>>>>>>> e17de01 (new ui)
       cursor: pointer;
       transition: all 0.3s;
     }
 
     .nav-dot.active {
+<<<<<<< HEAD
       background: #3b82f6;
       transform: scale(1.3);
     }
@@ -277,12 +489,23 @@
       opacity: 0;
       transform: translateY(30px);
       transition: all 0.7s ease;
+=======
+      background: #FFE156;
+      transform: scale(1.2) rotate(45deg);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.5s ease;
+>>>>>>> e17de01 (new ui)
     }
 
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
     }
+<<<<<<< HEAD
     .flag {
       font-size: 1.5rem;
     }
@@ -356,6 +579,35 @@
 
     .french-word:hover::after {
       transform: scaleX(1);
+=======
+
+    .flag {
+      font-size: 1.5rem;
+    }
+
+    .v-div {
+      width: 2.5px;
+      background: #1a1a1a;
+      align-self: stretch;
+      border-radius: 0;
+    }
+
+    /* French word interactions */
+    .french-word {
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 2px;
+      padding: 0 2px;
+      margin: 0 1px;
+      transition: all 0.15s;
+      position: relative;
+      font-weight: 500;
+    }
+
+    .french-word:hover {
+      background: #FFE156;
+      color: #1a1a1a;
+>>>>>>> e17de01 (new ui)
     }
 
     /* Word popup */
@@ -364,6 +616,7 @@
       z-index: 9999;
       min-width: 260px;
       max-width: 340px;
+<<<<<<< HEAD
       background: #1a1a24;
       border: 1px solid #2a2a35;
       border-radius: 16px;
@@ -373,18 +626,38 @@
       opacity: 0;
       transform: translateY(8px) scale(0.97);
       transition: opacity 0.2s ease, transform 0.2s ease;
+=======
+      background: #fff;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 6px 6px 0 #1a1a1a;
+      padding: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.2s;
+>>>>>>> e17de01 (new ui)
       pointer-events: none;
     }
 
     #word-popup.visible {
       opacity: 1;
+<<<<<<< HEAD
       transform: translateY(0) scale(1);
+=======
+      transform: translateY(0);
+>>>>>>> e17de01 (new ui)
       pointer-events: all;
     }
 
     .popup-header {
+<<<<<<< HEAD
       background: linear-gradient(135deg, #1d2d50, #0f1929);
       border-bottom: 1px solid #2a2a35;
+=======
+      background: #FFE156;
+      border-bottom: 2.5px solid #1a1a1a;
+>>>>>>> e17de01 (new ui)
       padding: 12px 16px 10px;
     }
 
@@ -392,18 +665,31 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.35rem;
       font-weight: 700;
+<<<<<<< HEAD
       color: #93c5fd;
       line-height: 1.2;
+=======
+      color: #1a1a1a;
+>>>>>>> e17de01 (new ui)
     }
 
     .popup-pos {
       font-size: 0.7rem;
+<<<<<<< HEAD
       color: #60a5fa;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 600;
       margin-top: 2px;
       opacity: 0.8;
+=======
+      color: #4F46E5;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-top: 2px;
+      font-family: 'Space Mono', monospace;
+>>>>>>> e17de01 (new ui)
     }
 
     .popup-body {
@@ -415,13 +701,22 @@
 
     .popup-meaning {
       font-size: 0.88rem;
+<<<<<<< HEAD
       color: #cbd5e1;
+=======
+      color: #333;
+>>>>>>> e17de01 (new ui)
       line-height: 1.55;
     }
 
     .popup-example-block {
+<<<<<<< HEAD
       background: rgba(59, 130, 246, 0.07);
       border-left: 2px solid rgba(59, 130, 246, 0.35);
+=======
+      background: #f0f0ff;
+      border-left: 3px solid #4F46E5;
+>>>>>>> e17de01 (new ui)
       border-radius: 0 8px 8px 0;
       padding: 8px 10px;
     }
@@ -429,15 +724,24 @@
     .popup-example {
       font-size: 0.82rem;
       font-style: italic;
+<<<<<<< HEAD
       color: #93c5fd;
+=======
+      color: #4F46E5;
+>>>>>>> e17de01 (new ui)
       line-height: 1.5;
     }
 
     .popup-example-en {
       font-size: 0.76rem;
+<<<<<<< HEAD
       color: #64748b;
       margin-top: 3px;
       line-height: 1.4;
+=======
+      color: #666;
+      margin-top: 3px;
+>>>>>>> e17de01 (new ui)
     }
 
     .popup-loading {
@@ -445,15 +749,24 @@
       align-items: center;
       gap: 8px;
       padding: 16px;
+<<<<<<< HEAD
       color: #64748b;
+=======
+      color: #666;
+>>>>>>> e17de01 (new ui)
       font-size: 0.82rem;
     }
 
     .popup-spinner {
       width: 14px;
       height: 14px;
+<<<<<<< HEAD
       border: 2px solid rgba(59, 130, 246, 0.3);
       border-top-color: #60a5fa;
+=======
+      border: 2.5px solid #ddd;
+      border-top-color: #4F46E5;
+>>>>>>> e17de01 (new ui)
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       flex-shrink: 0;
@@ -463,6 +776,7 @@
       position: absolute;
       top: 10px;
       right: 12px;
+<<<<<<< HEAD
       width: 22px;
       height: 22px;
       display: flex;
@@ -499,17 +813,64 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+=======
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 2px solid #1a1a1a;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #1a1a1a;
+      font-size: 0.8rem;
+      font-weight: 700;
+      box-shadow: 2px 2px 0 #1a1a1a;
+      transition: all 0.15s;
+    }
+
+    .popup-close:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 #1a1a1a;
+    }
+
+    .word-hint {
+      font-size: 0.75rem;
+      color: #4F46E5;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-align: right;
+      margin-top: 2px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Chatbot */
+    .chat-container {
+      background: #fff;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 4px 0 #1a1a1a;
+>>>>>>> e17de01 (new ui)
     }
 
     #chat-messages {
       scrollbar-width: thin;
+<<<<<<< HEAD
       scrollbar-color: #3b82f6 #0e0e10;
+=======
+      scrollbar-color: #1a1a1a #FFFDF5;
+>>>>>>> e17de01 (new ui)
     }
 
     #chat-messages::-webkit-scrollbar {
       width: 4px;
     }
 
+<<<<<<< HEAD
     #chat-messages::-webkit-scrollbar-track {
       background: transparent;
     }
@@ -517,6 +878,10 @@
     #chat-messages::-webkit-scrollbar-thumb {
       background: #3b82f6;
       border-radius: 2px;
+=======
+    #chat-messages::-webkit-scrollbar-thumb {
+      background: #1a1a1a;
+>>>>>>> e17de01 (new ui)
     }
 
     .chat-message {
@@ -530,6 +895,10 @@
         opacity: 0;
         transform: translateY(8px);
       }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e17de01 (new ui)
       to {
         opacity: 1;
         transform: translateY(0);
@@ -547,6 +916,7 @@
     .chat-bubble {
       max-width: 75%;
       padding: 10px 14px;
+<<<<<<< HEAD
       border-radius: 12px;
       font-size: 0.95rem;
       line-height: 1.5;
@@ -564,6 +934,27 @@
       color: #cbd5e1;
       border-bottom-left-radius: 4px;
       border: 1px solid rgba(59, 130, 246, 0.2);
+=======
+      border-radius: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+      border: 2px solid #1a1a1a;
+    }
+
+    .bubble-user {
+      background: #4F46E5;
+      color: white;
+      border-bottom-right-radius: 2px;
+      box-shadow: 2px 2px 0 #1a1a1a;
+    }
+
+    .bubble-bot {
+      background: #FFE156;
+      color: #1a1a1a;
+      border-bottom-left-radius: 2px;
+      box-shadow: 2px 2px 0 #1a1a1a;
+>>>>>>> e17de01 (new ui)
     }
 
     .culture-spinner {
@@ -574,6 +965,58 @@
       max-height: 120px;
       font-size: 0.95rem;
     }
+<<<<<<< HEAD
+=======
+
+    /* Marquee */
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 20s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      padding: 0 2rem;
+      color: #1a1a1a;
+      opacity: 0.06;
+    }
+
+    /* Decorative sticker */
+    .sticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      border: 2px solid #1a1a1a;
+      box-shadow: 2px 2px 0 #1a1a1a;
+      transform: rotate(-2deg);
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 3rem !important;
+      }
+
+      .translate-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .v-div {
+        display: none;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+>>>>>>> e17de01 (new ui)
   </style>
 </head>
 
@@ -587,14 +1030,19 @@
     <div class="nav-dot" data-section="4" title="About"></div>
   </div>
 
+<<<<<<< HEAD
   <section id="section-0" class="relative grid-bg flex flex-col items-center justify-center text-center px-6">
 
     <div class="orb orb-blue w-96 h-96 top-[-80px] right-[-60px] opacity-60"></div>
     <div class="orb orb-indigo w-80 h-80 bottom-[-60px] left-[-40px] opacity-50"></div>
+=======
+  <section id="section-0" class="relative flex flex-col items-center justify-center text-center px-6">
+>>>>>>> e17de01 (new ui)
 
     <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-6">
 
       <div class="badge reveal visible" style="transition-delay:0.1s">
+<<<<<<< HEAD
         <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
           <circle cx="4" cy="4" r="4" fill="#60a5fa" />
         </svg>
@@ -648,20 +1096,78 @@
           <path d="M8 13v4M5 15l3 3 3-3" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
+=======
+        ⚡ AI-POWERED · WORKS OFFLINE
+      </div>
+
+      <div class="animate-float">
+        <h1 class="hero-title font-display font-bold tracking-tight text-dark"
+          style="font-size:5rem; line-height:1.05;">
+          Quasso<span style="color: #4F46E5">.</span>
+        </h1>
+      </div>
+
+      <p class="text-gray-600 text-lg max-w-xl leading-relaxed reveal visible font-body" style="transition-delay:0.2s">
+        Parlez en <span class="font-bold text-dark">anglais</span> ou en <span
+          class="font-bold text-dark">hinglish</span> — nous le traduirons en
+        <span class="font-bold text-accent-blue">français</span>. Propulsé par un modèle d'IA local entraîné sur de
+        vrais sous-titres de films.
+      </p>
+
+      <div class="flex items-center gap-3 reveal visible" style="transition-delay:0.3s">
+        <div class="flex items-center gap-2 bg-white rounded-lg px-4 py-2 border-2 border-dark"
+          style="box-shadow: 3px 3px 0 #1a1a1a;">
+          <span class="flag">🇮🇳</span>
+          <span class="text-sm font-bold text-dark font-display">Hinglish / Anglais</span>
+        </div>
+        <span class="text-2xl font-bold text-dark">→</span>
+        <div class="flex items-center gap-2 bg-accent-blue rounded-lg px-4 py-2 border-2 border-dark text-white"
+          style="box-shadow: 3px 3px 0 #1a1a1a;">
+          <span class="flag">🇫🇷</span>
+          <span class="text-sm font-bold font-display">Français</span>
+        </div>
+      </div>
+
+      <!-- Floating stickers -->
+      <div class="flex gap-3 reveal visible" style="transition-delay:0.35s">
+        <span class="sticker" style="background: #BFFF00;">🎬 Movie Subtitles</span>
+        <span class="sticker" style="background: #FF6B9D; color: white; transform: rotate(2deg);">🤖 Local AI</span>
+        <span class="sticker" style="background: #FFE156;">🔒 Private</span>
+      </div>
+
+      <a href="#section-1" onclick="scrollToSection(1)" class="mt-2 btn-translate text-base px-10 py-3 reveal visible"
+        style="transition-delay:0.4s; text-decoration:none; font-size: 1.1rem;">
+        Try It Now →
+      </a>
+
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
+        <span class="text-xs tracking-widest uppercase text-gray-400 font-mono font-bold">Scroll</span>
+        <span class="text-xl animate-bounce">↓</span>
+>>>>>>> e17de01 (new ui)
       </div>
     </div>
   </section>
 
   <section id="section-1" class="relative flex flex-col items-center justify-center px-6 py-12">
+<<<<<<< HEAD
     <div class="orb orb-blue w-72 h-72 top-1/2 left-[-80px] -translate-y-1/2 opacity-30"></div>
+=======
+>>>>>>> e17de01 (new ui)
 
     <div class="relative z-10 w-full max-w-4xl flex flex-col gap-6">
 
       <div class="flex flex-col items-center gap-2 text-center">
+<<<<<<< HEAD
         <div class="badge">Translator</div>
         <h2 class="font-space font-bold text-3xl text-white mt-1">Translate to French</h2>
         <p class="text-slate-500 text-sm">Tapez n’importe quoi en anglais ou en hinglish, puis appuyez sur Traduire .
         </p>
+=======
+        <div class="badge">⚡ Translator</div>
+        <h2 class="font-display font-bold text-3xl text-dark mt-1">Translate to French</h2>
+        <p class="text-gray-500 text-sm font-body">Tapez n'importe quoi en anglais ou en hinglish, puis appuyez sur
+          Traduire.</p>
+>>>>>>> e17de01 (new ui)
       </div>
 
       <div class="grid translate-grid gap-4" style="grid-template-columns: 1fr auto 1fr;">
@@ -669,6 +1175,7 @@
         <div class="translate-box p-5 flex flex-col gap-3">
           <div class="flex items-center gap-2">
             <span class="flag text-xl">🇮🇳</span>
+<<<<<<< HEAD
             <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">English / Hinglish</span>
           </div>
           <textarea id="input-text" rows="7" placeholder="Type something like " How are you?"
@@ -677,16 +1184,30 @@
             <span id="char-count" class="text-xs text-slate-600">0 / 500</span>
             <button id="clear-btn" onclick="clearAll()"
               class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Clear</button>
+=======
+            <span class="text-xs font-bold uppercase tracking-widest text-gray-500 font-mono">English / Hinglish</span>
+          </div>
+          <textarea id="input-text" rows="7"
+            placeholder='Type something like "How are you?" or "Yaar, mujhe bhookh lag rahi hai"...'></textarea>
+          <div class="flex items-center justify-between pt-1 border-t-2 border-gray-200">
+            <span id="char-count" class="text-xs text-gray-400 font-mono">0 / 500</span>
+            <button id="clear-btn" onclick="clearAll()"
+              class="text-xs text-gray-400 hover:text-dark font-bold transition-colors">Clear</button>
+>>>>>>> e17de01 (new ui)
           </div>
         </div>
 
         <div class="v-div"></div>
+<<<<<<< HEAD
         <div class="hidden md:flex items-center" style="display:none"><!-- spacer --></div>
+=======
+>>>>>>> e17de01 (new ui)
 
         <!-- Output -->
         <div class="translate-box p-5 flex flex-col gap-3">
           <div class="flex items-center gap-2">
             <span class="flag text-xl">🇫🇷</span>
+<<<<<<< HEAD
             <span class="text-xs font-semibold uppercase tracking-widest text-blue-400">Français</span>
           </div>
           <div id="output-text" class="output-box flex-1">
@@ -698,6 +1219,19 @@
             <span id="output-status" class="text-xs text-slate-600"></span>
             <button id="copy-btn" onclick="copyOutput()"
               class="text-xs text-slate-500 hover:text-blue-400 transition-colors hidden">Copier</button>
+=======
+            <span class="text-xs font-bold uppercase tracking-widest font-mono" style="color: #4F46E5;">Français</span>
+          </div>
+          <div id="output-text" class="output-box flex-1">
+            <span class="text-gray-400 text-base font-normal" id="output-placeholder">La traduction apparaîtra
+              ici…</span>
+          </div>
+          <div id="word-hint" class="word-hint hidden">💡 Click any word to see its meaning</div>
+          <div class="flex items-center justify-between pt-1 border-t-2 border-gray-200">
+            <span id="output-status" class="text-xs text-gray-400 font-mono"></span>
+            <button id="copy-btn" onclick="copyOutput()"
+              class="text-xs text-gray-400 hover:text-accent-blue font-bold transition-colors hidden">Copier</button>
+>>>>>>> e17de01 (new ui)
           </div>
         </div>
       </div>
@@ -705,17 +1239,22 @@
       <div class="flex justify-center">
         <button id="translate-btn" onclick="doTranslate()" class="btn-translate px-10 py-3 text-base">
           <div class="spinner"></div>
+<<<<<<< HEAD
           <svg class="btn-text" width="18" height="18" viewBox="0 0 18 18" fill="none">
             <path d="M2 9C2 5.13 5.13 2 9 2M16 9c0 3.87-3.13 7-7 7" stroke="#fff" stroke-width="2"
               stroke-linecap="round" />
             <path d="M14 6l2-2-2-2M4 14l-2 2 2 2" stroke="#fff" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" />
           </svg>
+=======
+          <span class="btn-text">🔄</span>
+>>>>>>> e17de01 (new ui)
           <span class="btn-text">Traduire</span>
         </button>
       </div>
 
       <div class="flex flex-wrap gap-2 justify-center">
+<<<<<<< HEAD
         <span class="text-xs text-slate-600 self-center mr-1">Try:</span>
         <button onclick="setExample('Hello')"
           class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">"Hello"</button>
@@ -728,11 +1267,27 @@
         <button onclick="setExample('Thank you very much')"
           class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">"Thank
           you very much"</button>
+=======
+        <span class="text-xs text-gray-400 self-center mr-1 font-mono font-bold">TRY:</span>
+        <button onclick="setExample('Hello')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">"Hello"</button>
+        <button onclick="setExample('How are you?')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">"How are you?"</button>
+        <button onclick="setExample('Good morning')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">"Good morning"</button>
+        <button onclick="setExample('Thank you very much')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">"Thank you very much"</button>
+>>>>>>> e17de01 (new ui)
       </div>
     </div>
   </section>
 
   <section id="section-2" class="relative flex flex-col items-center justify-center px-6 py-10 overflow-hidden">
+<<<<<<< HEAD
     <div class="orb orb-blue w-80 h-80 top-[-60px] left-[-60px] opacity-20"></div>
     <div class="orb orb-indigo w-72 h-72 bottom-[-40px] right-[-40px] opacity-20"></div>
 
@@ -800,10 +1355,87 @@
           <path d="M530,125 C572,125 557,178 555,200" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#arr-gray)"/>
 
           <line x1="630" y1="230" x2="678" y2="230" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#arr)"/>
+=======
+
+    <div class="relative z-10 w-full max-w-6xl flex flex-col items-center gap-6">
+      <div class="flex flex-col items-center gap-2 text-center">
+        <div class="badge">🏗️ Architecture</div>
+        <h2 class="font-display font-bold text-3xl text-dark mt-1">How Quasso Works</h2>
+        <p class="text-gray-500 text-sm font-body">Translation pipeline & system sequence flow</p>
+      </div>
+      <div class="flex gap-2">
+        <button id="tab-flow" onclick="showDiagram('flow')"
+          class="text-xs px-4 py-1.5 rounded-full border-2 border-dark text-dark font-bold bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">① Flow Diagram</button>
+        <button id="tab-seq" onclick="showDiagram('seq')"
+          class="text-xs px-4 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">② Sequence Diagram</button>
+      </div>
+
+      <div id="diag-flow" class="w-full flex justify-center">
+        <svg viewBox="0 0 860 320" width="100%" style="max-height:320px; max-width:860px;"
+          xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+            <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#22c55e" />
+            </marker>
+            <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#f87171" />
+            </marker>
+            <marker id="arr-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#475569" />
+            </marker>
+          </defs>
+
+          <rect x="280" y="30" width="340" height="170" rx="6" fill="none" stroke="#334155" stroke-width="1.5"
+            stroke-dasharray="6 4" />
+          <text x="288" y="47" font-size="11" fill="#64748b">Gemma by Google</text>
+          <rect x="290" y="55" width="200" height="130" rx="4" fill="none" stroke="#1e3a5f" stroke-width="1"
+            stroke-dasharray="4 3" />
+          <text x="298" y="72" font-size="10" fill="#475569">(Hinglish to english)</text>
+
+          <rect x="20" y="200" width="120" height="60" rx="10" fill="#2563eb" opacity="0.9" />
+          <text x="80" y="225" text-anchor="middle" font-size="13" font-weight="600" fill="white">Get</text>
+          <text x="80" y="242" text-anchor="middle" font-size="13" font-weight="600" fill="white">Text</text>
+
+          <polygon points="230,230 280,200 330,230 280,260" fill="none" stroke="#38bdf8" stroke-width="2" />
+          <text x="280" y="226" text-anchor="middle" font-size="10" fill="#e2e8f0">Is it</text>
+          <text x="280" y="240" text-anchor="middle" font-size="10" fill="#e2e8f0">english?</text>
+
+          <rect x="390" y="90" width="140" height="70" rx="10" fill="#3b82f6" opacity="0.85" />
+          <text x="460" y="120" text-anchor="middle" font-size="12" font-weight="600" fill="white">Translate to</text>
+          <text x="460" y="137" text-anchor="middle" font-size="12" font-weight="600" fill="white">english</text>
+
+          <rect x="480" y="200" width="150" height="60" rx="10" fill="#2563eb" opacity="0.9" />
+          <text x="555" y="225" text-anchor="middle" font-size="12" font-weight="600" fill="white">Translate to</text>
+          <text x="555" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="white">french</text>
+
+          <polygon points="680,200 730,200 750,260 700,260" fill="#ec4899" opacity="0.9" />
+          <text x="715" y="232" text-anchor="middle" font-size="13" font-weight="600" fill="white">Data</text>
+
+          <line x1="140" y1="230" x2="226" y2="230" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#arr)" />
+
+          <line x1="330" y1="230" x2="478" y2="230" stroke="#22c55e" stroke-width="1.8" marker-end="url(#arr-green)" />
+          <text x="400" y="222" text-anchor="middle" font-size="11" font-weight="600" fill="#22c55e">Yes</text>
+
+          <path d="M280,200 C280,140 310,125 388,125" stroke="#f87171" stroke-width="1.8" fill="none"
+            marker-end="url(#arr-red)" />
+          <text x="295" y="162" font-size="11" font-weight="600" fill="#f87171">No</text>
+
+          <path d="M530,125 C572,125 557,178 555,200" stroke="#475569" stroke-width="1.5" fill="none"
+            marker-end="url(#arr-gray)" />
+
+          <line x1="630" y1="230" x2="678" y2="230" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#arr)" />
+>>>>>>> e17de01 (new ui)
         </svg>
       </div>
 
       <div id="diag-seq" class="w-full flex justify-center" style="display:none">
+<<<<<<< HEAD
         <svg viewBox="0 0 820 470" width="100%" style="max-height:470px; max-width:820px;" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
 
           <defs>
@@ -861,21 +1493,106 @@
           <text x="376" y="409" text-anchor="middle" font-size="9.5" fill="#94a3b8">200 OK {meaning, examples, pronunciation?}</text>
 
           <line x1="283" y1="445" x2="117" y2="445" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr2l)"/>
+=======
+        <svg viewBox="0 0 820 470" width="100%" style="max-height:470px; max-width:820px;"
+          xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+
+          <defs>
+            <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#3b82f6" />
+            </marker>
+            <marker id="arr2l" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#3b82f6" />
+            </marker>
+          </defs>
+
+          <rect x="55" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="110" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">User</text>
+          <rect x="235" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="290" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">UI</text>
+          <rect x="415" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="470" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">Backend</text>
+          <rect x="595" y="16" width="110" height="46" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="650" y="44" text-anchor="middle" font-size="14" font-weight="600" fill="#93c5fd">AI Model</text>
+
+          <line x1="110" y1="62" x2="110" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4" />
+          <line x1="290" y1="62" x2="290" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4" />
+          <line x1="470" y1="62" x2="470" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4" />
+          <line x1="650" y1="62" x2="650" y2="460" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="6 4" />
+
+          <line x1="110" y1="95" x2="283" y2="95" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)" />
+          <text x="196" y="90" text-anchor="middle" font-size="10" fill="#cbd5e1">Enter text (French/English
+            input)</text>
+
+          <line x1="290" y1="130" x2="463" y2="130" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)" />
+          <text x="376" y="124" text-anchor="middle" font-size="9.5" fill="#cbd5e1">POST /translate {text, sourceLang?,
+            targetLang="fr"}</text>
+
+          <line x1="470" y1="165" x2="643" y2="165" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)" />
+          <text x="556" y="159" text-anchor="middle" font-size="9.5" fill="#cbd5e1">Translate(text, sourceLang,
+            targetLang)</text>
+
+          <line x1="643" y1="200" x2="477" y2="200" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3"
+            marker-end="url(#arr2l)" />
+          <text x="556" y="194" text-anchor="middle" font-size="9.5" fill="#94a3b8">translation + token/traceId</text>
+
+          <line x1="463" y1="235" x2="297" y2="235" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3"
+            marker-end="url(#arr2l)" />
+          <text x="376" y="229" text-anchor="middle" font-size="9.5" fill="#94a3b8">200 OK {translation, traceId}</text>
+
+          <line x1="283" y1="270" x2="117" y2="270" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3"
+            marker-end="url(#arr2l)" />
+          <text x="196" y="264" text-anchor="middle" font-size="10" fill="#94a3b8">Display translation</text>
+
+          <line x1="60" y1="285" x2="760" y2="285" stroke="#1e293b" stroke-width="1" />
+
+          <line x1="110" y1="305" x2="283" y2="305" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)" />
+          <text x="196" y="299" text-anchor="middle" font-size="10" fill="#cbd5e1">Click word in translation</text>
+
+          <line x1="290" y1="335" x2="463" y2="335" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)" />
+          <text x="376" y="329" text-anchor="middle" font-size="9.5" fill="#cbd5e1">GET
+            /meaning?word=...&amp;context=...</text>
+
+          <line x1="470" y1="362" x2="643" y2="362" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr2)" />
+          <text x="556" y="356" text-anchor="middle" font-size="9.5" fill="#cbd5e1">Define(word, context) +
+            examples</text>
+
+          <line x1="643" y1="390" x2="477" y2="390" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3"
+            marker-end="url(#arr2l)" />
+          <text x="556" y="384" text-anchor="middle" font-size="9" fill="#94a3b8">meaning + examples +
+            pronunciation</text>
+
+          <line x1="463" y1="415" x2="297" y2="415" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3"
+            marker-end="url(#arr2l)" />
+          <text x="376" y="409" text-anchor="middle" font-size="9.5" fill="#94a3b8">200 OK {meaning, examples,
+            pronunciation?}</text>
+
+          <line x1="283" y1="445" x2="117" y2="445" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3"
+            marker-end="url(#arr2l)" />
+>>>>>>> e17de01 (new ui)
           <text x="196" y="439" text-anchor="middle" font-size="10" fill="#94a3b8">Show meaning tooltip/panel</text>
         </svg>
       </div>
 
+<<<<<<< HEAD
       <p class="text-slate-600 text-xs">↑ Scroll down for Team · Use tabs to switch diagrams</p>
+=======
+      <p class="text-gray-400 text-xs font-mono font-bold">↑ Scroll down for Team · Use tabs to switch diagrams</p>
+>>>>>>> e17de01 (new ui)
     </div>
   </section>
 
   <section id="section-3" class="relative flex flex-col items-center justify-center px-6 py-12">
+<<<<<<< HEAD
     <div class="orb orb-blue w-80 h-80 top-1/2 right-[-80px] -translate-y-1/2 opacity-30"></div>
+=======
+>>>>>>> e17de01 (new ui)
 
     <div class="relative z-10 w-full max-w-4xl flex flex-col gap-6 h-full">
 
       <div class="flex flex-col items-center gap-2 text-center">
         <div class="badge">🇫🇷 Culture</div>
+<<<<<<< HEAD
         <h2 class="font-space font-bold text-3xl text-white mt-1">French Culture Chatbot</h2>
         <p class="text-slate-500 text-sm">Ask questions about French culture, history, cuisine & traditions</p>
       </div>
@@ -884,10 +1601,21 @@
         <div id="chat-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 scroll-smooth">
           <div class="flex justify-start">
             <div class="bg-blue-500/20 text-blue-300 rounded-lg px-4 py-2 max-w-xs text-sm">
+=======
+        <h2 class="font-display font-bold text-3xl text-dark mt-1">French Culture Chatbot</h2>
+        <p class="text-gray-500 text-sm font-body">Ask questions about French culture, history, cuisine & traditions</p>
+      </div>
+
+      <div class="chat-container flex-1 flex flex-col overflow-hidden">
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 scroll-smooth">
+          <div class="flex justify-start">
+            <div class="chat-bubble bubble-bot max-w-xs text-sm">
+>>>>>>> e17de01 (new ui)
               Bonjour! 👋 Ask me anything about French culture, history, food, traditions, or lifestyle!
             </div>
           </div>
         </div>
+<<<<<<< HEAD
         <div class="border-t border-border p-3">
           <div class="flex gap-2">
             <textarea id="culture-input" rows="2" placeholder="What do you want to know about France?" class="flex-1 bg-transparent resize-none outline-none border border-border rounded-lg px-3 py-2 text-sm text-slate-300 focus:border-blue-500" style="font-family: 'Inter', sans-serif;"></textarea>
@@ -895,6 +1623,19 @@
               <svg class="culture-spinner hidden" width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" stroke-dasharray="11" opacity="0.3"/>
                 <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" stroke-dasharray="11" style="stroke-dashoffset: 11; animation: spin 0.8s linear infinite;"/>
+=======
+        <div class="border-t-2 border-dark p-3">
+          <div class="flex gap-2">
+            <textarea id="culture-input" rows="2" placeholder="What do you want to know about France?"
+              class="flex-1 bg-transparent resize-none outline-none border-2 border-dark rounded-lg px-3 py-2 text-sm text-dark focus:border-accent-blue"
+              style="font-family: 'DM Sans', sans-serif;"></textarea>
+            <button onclick="sendCultureMessage()" class="btn-translate px-4 py-2 self-end">
+              <svg class="culture-spinner hidden" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" stroke-dasharray="11"
+                  opacity="0.3" />
+                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" stroke-dasharray="11"
+                  style="stroke-dashoffset: 11; animation: spin 0.8s linear infinite;" />
+>>>>>>> e17de01 (new ui)
               </svg>
               <span class="culture-btn-text">Send</span>
             </button>
@@ -903,16 +1644,33 @@
       </div>
 
       <div class="flex flex-wrap gap-2 justify-center">
+<<<<<<< HEAD
         <span class="text-xs text-slate-600 self-center mr-1">Quick questions:</span>
         <button onclick="setCultureExample('What are the main French holidays?')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Holidays</button>
         <button onclick="setCultureExample('Tell me about French cuisine')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Cuisine</button>
         <button onclick="setCultureExample('What is the Eiffel Tower?')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Landmarks</button>
         <button onclick="setCultureExample('Tell me about French art')" class="text-xs px-3 py-1.5 rounded-full border border-border text-slate-400 hover:border-blue-500 hover:text-blue-400 transition-all">Art & Culture</button>
+=======
+        <span class="text-xs text-gray-400 self-center mr-1 font-mono font-bold">ASK:</span>
+        <button onclick="setCultureExample('What are the main French holidays?')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">Holidays</button>
+        <button onclick="setCultureExample('Tell me about French cuisine')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">Cuisine</button>
+        <button onclick="setCultureExample('What is the Eiffel Tower?')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">Landmarks</button>
+        <button onclick="setCultureExample('Tell me about French art')"
+          class="text-xs px-3 py-1.5 rounded-full border-2 border-dark text-dark font-bold hover:bg-accent-yellow transition-all"
+          style="box-shadow: 2px 2px 0 #1a1a1a;">Art & Culture</button>
+>>>>>>> e17de01 (new ui)
       </div>
     </div>
   </section>
 
   <footer id="section-4" class="relative flex flex-col items-center justify-center px-6 py-12 text-center">
+<<<<<<< HEAD
     <div class="orb orb-indigo w-80 h-80 top-0 right-0 opacity-25"></div>
     <div class="orb orb-blue w-64 h-64 bottom-0 left-0 opacity-20"></div>
 
@@ -921,56 +1679,99 @@
         <div class="badge">The Team</div>
         <h2 class="font-space font-bold text-3xl text-white mt-1">Fait avec une touche française</h2>
         <p class="text-slate-500 text-sm max-w-sm">Un projet étudiant réalisé pour un PBL de français, avec passion.</p>
+=======
+
+    <div class="relative z-10 w-full max-w-3xl flex flex-col items-center gap-10">
+      <div class="flex flex-col items-center gap-2">
+        <div class="badge">👥 The Team</div>
+        <h2 class="font-display font-bold text-3xl text-dark mt-1">Fait avec une touche française</h2>
+        <p class="text-gray-500 text-sm max-w-sm font-body">Un projet étudiant réalisé pour un PBL de français, avec
+          passion.</p>
+>>>>>>> e17de01 (new ui)
       </div>
 
       <div class="team-grid w-full" style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
         <div class="team-card">
           <div class="avatar">AR</div>
           <div class="text-left">
+<<<<<<< HEAD
             <div class="font-semibold text-sm text-white">Aditya Raj</div>
             <div class="text-xs text-slate-500 mt-0.5">RA2511028010001</div>
+=======
+            <div class="font-bold text-sm text-dark">Aditya Raj</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-mono">RA2511028010001</div>
+>>>>>>> e17de01 (new ui)
           </div>
         </div>
         <div class="team-card">
           <div class="avatar">KS</div>
           <div class="text-left">
+<<<<<<< HEAD
             <div class="font-semibold text-sm text-white">Konakalla Manohara Sanjay</div>
             <div class="text-xs text-slate-500 mt-0.5">RA2511027010057</div>
+=======
+            <div class="font-bold text-sm text-dark">Konakalla Manohara Sanjay</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-mono">RA2511027010057</div>
+>>>>>>> e17de01 (new ui)
           </div>
         </div>
         <div class="team-card">
           <div class="avatar">SM</div>
           <div class="text-left">
+<<<<<<< HEAD
             <div class="font-semibold text-sm text-white">Sriharshini Munagala</div>
             <div class="text-xs text-slate-500 mt-0.5">RA2511027010038</div>
+=======
+            <div class="font-bold text-sm text-dark">Sriharshini Munagala</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-mono">RA2511027010038</div>
+>>>>>>> e17de01 (new ui)
           </div>
         </div>
         <div class="team-card">
           <div class="avatar">SP</div>
           <div class="text-left">
+<<<<<<< HEAD
             <div class="font-semibold text-sm text-white">S. Puneeth Reddy</div>
             <div class="text-xs text-slate-500 mt-0.5">RA2511027010089</div>
+=======
+            <div class="font-bold text-sm text-dark">S. Puneeth Reddy</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-mono">RA2511027010089</div>
+>>>>>>> e17de01 (new ui)
           </div>
         </div>
         <div class="team-card" style="grid-column: 1 / -1;">
           <div class="avatar">MP</div>
           <div class="text-left">
+<<<<<<< HEAD
             <div class="font-semibold text-sm text-white">M. Praveen</div>
             <div class="text-xs text-slate-500 mt-0.5">RA2511027010055</div>
+=======
+            <div class="font-bold text-sm text-dark">M. Praveen</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-mono">RA2511027010055</div>
+>>>>>>> e17de01 (new ui)
           </div>
         </div>
       </div>
 
       <div class="flex flex-col items-center gap-2 max-w-md">
+<<<<<<< HEAD
         <div class="text-xs text-slate-600 uppercase tracking-widest font-medium">Training Data</div>
         <p class="text-sm text-slate-400">
           « Modèle entraîné sur des sous-titres de films provenant de »
           <a href="https://www.opensubtitles.org" target="_blank" rel="noopener"
             class="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors">
+=======
+        <div class="text-xs text-gray-400 uppercase tracking-widest font-bold font-mono">Training Data</div>
+        <p class="text-sm text-gray-500 font-body">
+          « Modèle entraîné sur des sous-titres de films provenant de »
+          <a href="https://www.opensubtitles.org" target="_blank" rel="noopener"
+            class="text-accent-blue font-bold underline underline-offset-2 transition-colors hover:text-dark">
+>>>>>>> e17de01 (new ui)
             opensubtitles.org
           </a>
         </p>
 
+<<<<<<< HEAD
         <div class="flex items-center gap-2 mt-1 text-slate-600 text-xs">
           <span>Powered by</span>
           <span class="font-semibold text-slate-400">Ollama</span>
@@ -983,6 +1784,19 @@
           <span>Design by</span>
           <span class="font-semibold text-slate-400">Aditya</span>
           <span></span>
+=======
+        <div class="flex items-center gap-2 mt-1 text-gray-400 text-xs font-mono font-bold">
+          <span>Powered by</span>
+          <span class="text-dark">Ollama</span>
+          <span>·</span>
+          <span class="text-accent-blue">Quasso</span>
+          <span>·</span>
+          <span>© 2026</span>
+        </div>
+        <div class="flex items-center gap-2 mt-1 text-gray-400 text-xs font-mono">
+          <span>Design by</span>
+          <span class="font-bold text-dark">Aditya</span>
+>>>>>>> e17de01 (new ui)
         </div>
       </div>
     </div>
@@ -1015,6 +1829,7 @@
     // ---- Diagram tab switcher ----
     function showDiagram(which) {
       const flow = document.getElementById('diag-flow');
+<<<<<<< HEAD
       const seq  = document.getElementById('diag-seq');
       const tabFlow = document.getElementById('tab-flow');
       const tabSeq  = document.getElementById('tab-seq');
@@ -1033,6 +1848,26 @@
         tabSeq.classList.remove('border-border','text-slate-400');
         tabFlow.classList.remove('border-blue-500','text-blue-400','bg-blue-500/10','font-semibold');
         tabFlow.classList.add('border-border','text-slate-400');
+=======
+      const seq = document.getElementById('diag-seq');
+      const tabFlow = document.getElementById('tab-flow');
+      const tabSeq = document.getElementById('tab-seq');
+
+      if (which === 'flow') {
+        flow.style.display = 'flex';
+        seq.style.display = 'none';
+        tabFlow.classList.add('bg-accent-yellow');
+        tabFlow.classList.remove('bg-transparent');
+        tabSeq.classList.remove('bg-accent-yellow');
+        tabSeq.classList.add('bg-transparent');
+      } else {
+        seq.style.display = 'flex';
+        flow.style.display = 'none';
+        tabSeq.classList.add('bg-accent-yellow');
+        tabSeq.classList.remove('bg-transparent');
+        tabFlow.classList.remove('bg-accent-yellow');
+        tabFlow.classList.add('bg-transparent');
+>>>>>>> e17de01 (new ui)
       }
     }
 
@@ -1122,7 +1957,11 @@
     function clearAll() {
       inputEl.value = '';
       charCount.textContent = '0 / 500';
+<<<<<<< HEAD
       document.getElementById('output-text').innerHTML = '<span class="text-slate-600 text-base font-normal">Translation will appear here...</span>';
+=======
+      document.getElementById('output-text').innerHTML = '<span class="text-gray-400 text-base font-normal">La traduction apparaîtra ici…</span>';
+>>>>>>> e17de01 (new ui)
       document.getElementById('output-status').textContent = '';
       document.getElementById('copy-btn').classList.add('hidden');
       document.getElementById('word-hint').classList.add('hidden');
